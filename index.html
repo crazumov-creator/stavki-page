@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Окно ставок">
+<meta name="theme-color" content="#101419">
+</head>
+<body>
+<title>Окно ставок</title>
+<style>
+:root{
+  /* Табло букмекера: тёмная доска, меловые цифры. Латунь — акцент,
+     зелёный и красный оставлены только под вердикт, чтобы не спорить с ним. */
+  --ground:#f2f3f5; --card:#ffffff; --edge:#dcdfe4;
+  --ink:#151a20; --ink-dim:#5d666f; --ink-faint:#8b939b;
+  --brass:#8a6a1f; --brass-soft:#f3ead2;
+  --yes:#186b3a; --yes-bg:#e4f3e9;
+  --no:#9c2b2b; --no-bg:#fbe9e9;
+  --chip:#eef0f3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#101419; --card:#181d24; --edge:#262d36;
+    --ink:#e9edf1; --ink-dim:#9aa4ae; --ink-faint:#6d7783;
+    --brass:#d4ad57; --brass-soft:#2a2416;
+    --yes:#57d98a; --yes-bg:#12301f;
+    --no:#ff8080; --no-bg:#331717;
+    --chip:#222932;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101419; --card:#181d24; --edge:#262d36;
+  --ink:#e9edf1; --ink-dim:#9aa4ae; --ink-faint:#6d7783;
+  --brass:#d4ad57; --brass-soft:#2a2416;
+  --yes:#57d98a; --yes-bg:#12301f;
+  --no:#ff8080; --no-bg:#331717;
+  --chip:#222932;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:16px; line-height:1.45;
+  -webkit-text-size-adjust:100%;
+}
+.num{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+     font-variant-numeric:tabular-nums}
+.wrap{max-width:640px; margin:0 auto; padding:18px 14px 56px}
+
+header{display:flex; flex-direction:column; gap:6px; margin-bottom:16px}
+h1{margin:0; font-size:1.45rem; letter-spacing:-.02em; text-wrap:balance}
+.sub{color:var(--ink-dim); font-size:.9rem}
+.stamp{color:var(--ink-faint); font-size:.78rem; text-transform:uppercase;
+       letter-spacing:.07em}
+
+.stale{background:var(--brass-soft); color:var(--brass); border:1px solid var(--brass);
+       border-radius:10px; padding:10px 12px; font-size:.86rem; margin-bottom:14px}
+
+.filters{display:flex; gap:8px; margin-bottom:14px}
+.filters button{
+  flex:1; padding:9px 10px; border-radius:999px; border:1px solid var(--edge);
+  background:var(--card); color:var(--ink-dim); font-size:.85rem; font-weight:600;
+  cursor:pointer; font-family:inherit;
+}
+.filters button[aria-pressed="true"]{
+  background:var(--ink); color:var(--ground); border-color:var(--ink);
+}
+.filters button:focus-visible, .card:focus-visible, input:focus-visible,
+.copy:focus-visible{outline:2px solid var(--brass); outline-offset:2px}
+
+.list{display:flex; flex-direction:column; gap:10px}
+.card{
+  background:var(--card); border:1px solid var(--edge); border-radius:14px;
+  padding:13px 14px; cursor:pointer; -webkit-tap-highlight-color:transparent;
+}
+.card.hot{border-color:var(--brass)}
+.top{display:flex; align-items:center; gap:8px; margin-bottom:5px}
+.chip{font-size:.7rem; text-transform:uppercase; letter-spacing:.06em;
+      background:var(--chip); color:var(--ink-dim); padding:3px 8px; border-radius:999px}
+.chip.sig{background:var(--brass-soft); color:var(--brass); font-weight:700}
+.chip.move{background:transparent; color:var(--brass); border:1px solid var(--brass)}
+.when{margin-left:auto; color:var(--ink-faint); font-size:.78rem}
+.match{color:var(--ink-dim); font-size:.85rem}
+.outcome{font-size:1.05rem; font-weight:650; letter-spacing:-.01em; margin-top:2px}
+
+.price{display:flex; align-items:baseline; gap:10px; margin-top:9px;
+       padding-top:9px; border-top:1px dashed var(--edge)}
+.price .lab{font-size:.7rem; text-transform:uppercase; letter-spacing:.07em;
+            color:var(--ink-faint)}
+.price .big{font-size:1.6rem; font-weight:700; letter-spacing:-.02em}
+.price .fair{margin-left:auto; font-size:.78rem; color:var(--ink-faint); text-align:right}
+
+.panel{margin-top:12px; padding-top:12px; border-top:1px solid var(--edge); display:none}
+.card.open .panel{display:block}
+.panel label{display:block; font-size:.8rem; color:var(--ink-dim); margin-bottom:6px}
+.row{display:flex; gap:8px; align-items:center}
+input[type="text"]{
+  width:110px; padding:10px 12px; font-size:1.25rem; text-align:center;
+  border-radius:10px; border:1px solid var(--edge); background:var(--ground);
+  color:var(--ink); font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+.verdict{margin-top:11px; padding:11px 12px; border-radius:11px; font-weight:700;
+         font-size:1.02rem; display:none}
+.verdict.on{display:block}
+.verdict.yes{background:var(--yes-bg); color:var(--yes)}
+.verdict.no{background:var(--no-bg); color:var(--no)}
+.verdict small{display:block; font-weight:500; font-size:.8rem; margin-top:3px;
+               opacity:.85}
+
+.note{margin-top:10px; display:none}
+.card.done .note{display:block}
+.note .lab{font-size:.72rem; color:var(--ink-faint); margin-bottom:5px}
+.note .row{gap:6px}
+.note input{width:100%; font-size:.82rem; text-align:left; padding:9px 10px;
+            font-family:inherit}
+.copy{padding:9px 12px; border-radius:9px; border:1px solid var(--edge);
+      background:var(--card); color:var(--ink-dim); font-size:.8rem; cursor:pointer;
+      font-family:inherit; white-space:nowrap}
+
+.empty{text-align:center; color:var(--ink-faint); padding:34px 10px; font-size:.9rem}
+footer{margin-top:26px; color:var(--ink-faint); font-size:.78rem; line-height:1.6}
+footer b{color:var(--ink-dim); font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+  .card{transition:border-color .15s ease}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Окно ставок</h1>
+    <div class="sub">Честная цена матча и минимальный коэффициент, при котором
+      ставка выгодна. Сравни с ценой в своей БК.</div>
+    <div class="stamp">снимок 16.08 08:12 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
+  </header>
+
+  <div class="stale" id="stale" style="display:none"></div>
+
+  <div class="filters">
+    <button type="button" data-mode="signals" aria-pressed="true">Сигналы</button>
+    <button type="button" data-mode="all" aria-pressed="false">Все матчи</button>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <footer>
+    <b>Как пользоваться.</b> Нажми на матч, найди этот же исход в своей БК и впиши
+    её коэффициент. Страница сама скажет, ставить или пропустить.<br><br>
+    <b>Порог +5%.</b> Ставка имеет смысл, только когда цена в БК выше честной
+    на этот запас — иначе её съедает маржа букмекера.<br><br>
+    <b>Метка «линия ушла».</b> Показывает, насколько сдвинулась честная цена
+    с прошлого замера. Это не сигнал к ставке и не признак договорного матча —
+    к моменту, когда сдвиг виден, цена уже ушла. Метка нужна, чтобы потом
+    проверить: дают такие матчи преимущество или нет.<br><br>
+    <b>Это снимок, а не живые котировки.</b> Список обновляет компьютер каждые
+    12 ч. Матчи, которые уже начались, скрываются автоматически.<br><br>
+    <b>Ставки записываются на компьютере.</b> Скопируй строку из карточки и внеси
+    её в журнал — по нему считается CLV, ради которого всё и затевалось.
+  </footer>
+</div>
+
+<script>
+const DATA = [{"t": "2026-08-16T12:00:00Z", "m": "IF Brommapojkarna - Örgryte IS", "o": "Örgryte IS", "f": 4.1, "p": 4.3, "s": 14.6, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T21:30:00Z", "m": "Mirassol - Flamengo", "o": "Flamengo", "f": 1.93, "p": 2.02, "s": 4.3, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T21:30:00Z", "m": "Vitoria - Botafogo", "o": "Draw", "f": 3.29, "p": 3.45, "s": 3.4, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "Djurgardens IF - AIK", "o": "Draw", "f": 4.84, "p": 5.08, "s": 3.4, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T17:00:00Z", "m": "Espanyol - Levante", "o": "Levante", "f": 4.01, "p": 4.21, "s": 2.3, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T17:00:00Z", "m": "Espanyol - Levante", "o": "Draw", "f": 3.4, "p": 3.57, "s": 1.9, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T15:00:00Z", "m": "Real Racing Club de Santander - Villarreal", "o": "Villarreal", "f": 2.17, "p": 2.28, "s": 1.2, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-17T17:00:00Z", "m": "BK Hacken - Halmstads BK", "o": "BK Hacken", "f": 1.33, "p": 1.4, "s": 0.7, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T22:30:00Z", "m": "Corinthians - Cruzeiro", "o": "Draw", "f": 3.2, "p": 3.36, "s": 0.5, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-17T19:00:00Z", "m": "Deportivo La Coruña - Elche CF", "o": "Deportivo La Coruña", "f": 2.44, "p": 2.56, "s": 0.1, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-17T19:00:00Z", "m": "Deportivo La Coruña - Elche CF", "o": "Draw", "f": 3.15, "p": 3.31, "s": -0.0, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T19:00:00Z", "m": "Vasco da Gama - Santos", "o": "Vasco da Gama", "f": 1.98, "p": 2.08, "s": -0.1, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:30:00Z", "m": "GAIS - Malmo FF", "o": "GAIS", "f": 2.3, "p": 2.42, "s": -0.2, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "Degerfors IF - IFK Goteborg", "o": "IFK Goteborg", "f": 2.39, "p": 2.51, "s": -0.4, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-17T23:00:00Z", "m": "Internacional - Remo", "o": "Internacional", "f": 1.62, "p": 1.7, "s": -0.7, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T15:00:00Z", "m": "Real Racing Club de Santander - Villarreal", "o": "Real Racing Club de Santander", "f": 3.63, "p": 3.81, "s": -0.7, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "Djurgardens IF - AIK", "o": "AIK", "f": 5.87, "p": 6.16, "s": -1.2, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:30:00Z", "m": "Kalmar FF - Hammarby IF", "o": "Hammarby IF", "f": 1.88, "p": 1.97, "s": -1.5, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:30:00Z", "m": "GAIS - Malmo FF", "o": "Malmo FF", "f": 3.26, "p": 3.42, "s": -1.8, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:00:00Z", "m": "Chapecoense - Bahia", "o": "Bahia", "f": 2.13, "p": 2.24, "s": -1.9, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T19:00:00Z", "m": "Atletico Mineiro - Grêmio", "o": "Atletico Mineiro", "f": 1.91, "p": 2.0, "s": -1.9, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "Djurgardens IF - AIK", "o": "Djurgardens IF", "f": 1.6, "p": 1.69, "s": -2.2, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T15:00:00Z", "m": "Real Racing Club de Santander - Villarreal", "o": "Draw", "f": 3.79, "p": 3.98, "s": -2.3, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-17T19:00:00Z", "m": "Deportivo La Coruña - Elche CF", "o": "Elche CF", "f": 3.67, "p": 3.86, "s": -2.3, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "Degerfors IF - IFK Goteborg", "o": "Draw", "f": 3.54, "p": 3.72, "s": -2.5, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T22:30:00Z", "m": "Corinthians - Cruzeiro", "o": "Cruzeiro", "f": 3.46, "p": 3.63, "s": -2.7, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "IF Brommapojkarna - Örgryte IS", "o": "IF Brommapojkarna", "f": 1.89, "p": 1.99, "s": -2.7, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:30:00Z", "m": "GAIS - Malmo FF", "o": "Draw", "f": 3.86, "p": 4.05, "s": -2.8, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T17:00:00Z", "m": "Espanyol - Levante", "o": "Espanyol", "f": 2.19, "p": 2.3, "s": -2.9, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T21:30:00Z", "m": "Vitoria - Botafogo", "o": "Vitoria", "f": 2.47, "p": 2.6, "s": -3.0, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:30:00Z", "m": "Kalmar FF - Hammarby IF", "o": "Kalmar FF", "f": 4.49, "p": 4.71, "s": -3.0, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:00:00Z", "m": "Chapecoense - Bahia", "o": "Draw", "f": 3.6, "p": 3.78, "s": -3.4, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:30:00Z", "m": "Kalmar FF - Hammarby IF", "o": "Draw", "f": 4.09, "p": 4.29, "s": -3.4, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T19:00:00Z", "m": "Vasco da Gama - Santos", "o": "Draw", "f": 3.74, "p": 3.93, "s": -3.8, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T21:30:00Z", "m": "Vitoria - Botafogo", "o": "Botafogo", "f": 3.43, "p": 3.6, "s": -3.8, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T19:00:00Z", "m": "Atletico Mineiro - Grêmio", "o": "Grêmio", "f": 4.67, "p": 4.9, "s": -4.1, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T22:30:00Z", "m": "Corinthians - Cruzeiro", "o": "Corinthians", "f": 2.51, "p": 2.63, "s": -4.2, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T19:00:00Z", "m": "Atletico Mineiro - Grêmio", "o": "Draw", "f": 3.82, "p": 4.01, "s": -4.3, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T14:00:00Z", "m": "Chapecoense - Bahia", "o": "Chapecoense", "f": 3.96, "p": 4.15, "s": -4.5, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T21:30:00Z", "m": "Mirassol - Flamengo", "o": "Draw", "f": 3.79, "p": 3.98, "s": -4.6, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T19:00:00Z", "m": "Vasco da Gama - Santos", "o": "Santos", "f": 4.38, "p": 4.6, "s": -5.7, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "Degerfors IF - IFK Goteborg", "o": "Degerfors IF", "f": 3.34, "p": 3.51, "s": -5.8, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T21:30:00Z", "m": "Mirassol - Flamengo", "o": "Mirassol", "f": 4.6, "p": 4.83, "s": -6.6, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-17T23:00:00Z", "m": "Internacional - Remo", "o": "Draw", "f": 4.5, "p": 4.72, "s": -7.0, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-16T12:00:00Z", "m": "IF Brommapojkarna - Örgryte IS", "o": "Draw", "f": 4.4, "p": 4.62, "s": -9.1, "l": "Швеция", "r": "Pinnacle", "mv": null, "mh": null}], CFG = {"thr": 5.0, "move": 8.0, "stake": 62.5, "built": 1786857141};
+const fmt = n => n.toFixed(2);
+
+function timeLabel(iso){
+  const d = new Date(iso);
+  const days = ["вс","пн","вт","ср","чт","пт","сб"];
+  const p = n => String(n).padStart(2,"0");
+  return days[d.getDay()] + " " + p(d.getDate()) + "." + p(d.getMonth()+1)
+       + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+
+let mode = "signals";
+
+function render(){
+  const now = Date.now();
+  // Начавшийся матч убираем сам: линия там уже другая, ставить по ней нельзя
+  let rows = DATA.filter(r => new Date(r.t).getTime() > now);
+  if (mode === "signals") rows = rows.filter(r => r.s !== null && r.s >= CFG.thr);
+
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  if (!rows.length){
+    const d = document.createElement("div");
+    d.className = "empty";
+    d.textContent = mode === "signals"
+      ? "Сигналов нет. Это обычное дело — расхождения редки. Посмотри «Все матчи»."
+      : "Матчей нет. Список ждёт обновления с компьютера.";
+    list.appendChild(d);
+    return;
+  }
+  rows.forEach((r, i) => list.appendChild(card(r, i)));
+}
+
+function card(r, i){
+  const hot = r.s !== null && r.s >= CFG.thr;
+  const moved = r.mv !== null && Math.abs(r.mv) >= CFG.move;
+  const el = document.createElement("article");
+  el.className = "card" + (hot ? " hot" : "");
+  el.tabIndex = 0;
+  el.innerHTML =
+    '<div class="top">' +
+      '<span class="chip">' + r.l + '</span>' +
+      (hot ? '<span class="chip sig">сигнал ' + (r.s>0?"+":"") + r.s + '%</span>' : '') +
+      (moved ? '<span class="chip move">линия ' + (r.mv>0?"+":"") + r.mv
+             + '% за ' + r.mh + ' ч</span>' : '') +
+      (r.r === "медиана" ? '<span class="chip">цена по медиане</span>' : '') +
+      '<span class="when">' + timeLabel(r.t) + '</span>' +
+    '</div>' +
+    '<div class="match">' + r.m + '</div>' +
+    '<div class="outcome">' + r.o + '</div>' +
+    '<div class="price">' +
+      '<div><div class="lab">ставить если</div>' +
+        '<div class="big num">' + fmt(r.p) + '</div></div>' +
+      '<div class="fair">честная цена<br><b class="num">' + fmt(r.f) + '</b></div>' +
+    '</div>' +
+    '<div class="panel">' +
+      '<label for="in' + i + '">Коэффициент в моей БК</label>' +
+      '<div class="row">' +
+        '<input id="in' + i + '" type="text" inputmode="decimal" placeholder="0.00">' +
+      '</div>' +
+      '<div class="verdict" id="v' + i + '"></div>' +
+      '<div class="note">' +
+        '<div class="lab">Строка для записи в журнал на компьютере</div>' +
+        '<div class="row">' +
+          '<input id="n' + i + '" type="text" readonly>' +
+          '<button class="copy" type="button">Копировать</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  const input = el.querySelector("input");
+  const verdict = el.querySelector(".verdict");
+  const note = el.querySelector(".note input");
+  const copy = el.querySelector(".copy");
+
+  el.addEventListener("click", e => {
+    if (e.target.closest(".panel")) return;
+    el.classList.toggle("open");
+    if (el.classList.contains("open")) input.focus();
+  });
+  el.addEventListener("keydown", e => {
+    if (e.key === "Enter" && !e.target.closest(".panel")) el.classList.toggle("open");
+  });
+
+  input.addEventListener("input", () => {
+    const o = parseFloat(input.value.replace(",", "."));
+    if (!(o > 1)){ verdict.className = "verdict"; el.classList.remove("done"); return; }
+    // value = честная вероятность * коэффициент - 1, а честная вероятность = 1/честный коэф
+    const v = (o / r.f - 1) * 100;
+    if (v >= CFG.thr){
+      verdict.className = "verdict on yes";
+      verdict.innerHTML = "СТАВИТЬ " + CFG.stake.toFixed(2) + " ₽" +
+        "<small>запас " + v.toFixed(2) + "% сверх честной цены</small>";
+      el.classList.add("done");
+      note.value = r.m + " / " + r.o + " / коэф " + fmt(o);
+    } else {
+      verdict.className = "verdict on no";
+      verdict.innerHTML = "НЕ СТАВИТЬ" +
+        "<small>запас " + v.toFixed(2) + "%, нужен коэффициент " + fmt(r.p) + " и выше</small>";
+      el.classList.remove("done");
+    }
+  });
+
+  copy.addEventListener("click", () => {
+    note.select();
+    note.setSelectionRange(0, 99999);
+    if (navigator.clipboard) navigator.clipboard.writeText(note.value).catch(() => {});
+    else document.execCommand("copy");
+    copy.textContent = "Скопировано";
+    setTimeout(() => copy.textContent = "Копировать", 1600);
+  });
+
+  return el;
+}
+
+document.querySelectorAll(".filters button").forEach(b => {
+  b.addEventListener("click", () => {
+    mode = b.dataset.mode;
+    document.querySelectorAll(".filters button")
+      .forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    render();
+  });
+});
+
+// Возраст снимка страница считает сама — иначе легко принять старые цены за свежие
+const hours = (Date.now() - CFG.built * 1000) / 3600000;
+if (hours > 12){
+  const w = document.getElementById("stale");
+  w.textContent = "Снимок сделан " + Math.round(hours) + " ч назад. Коэффициенты"
+    + " могли уйти — сверь с компьютером, прежде чем ставить.";
+  w.style.display = "block";
+}
+render();
+</script>
+
+</body>
+</html>
