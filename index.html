@@ -134,7 +134,7 @@ footer b{color:var(--ink-dim); font-weight:600}
     <h1>Окно ставок</h1>
     <div class="sub">Честная цена матча и минимальный коэффициент, при котором
       ставка выгодна. Сравни с ценой в своей БК.</div>
-    <div class="stamp">снимок 26.08 04:43 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
+    <div class="stamp">снимок 26.08 16:53 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
   </header>
 
   <div class="stale" id="stale" style="display:none"></div>
@@ -167,7 +167,7 @@ footer b{color:var(--ink-dim); font-weight:600}
 </div>
 
 <script>
-const DATA = [{"t": "2026-08-27T19:00:00Z", "m": "Barcelona - Athletic Bilbao", "o": "Barcelona", "f": 1.33, "p": 1.36, "s": 2.3, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-26T19:00:00Z", "m": "Real Madrid - Real Sociedad", "o": "Real Madrid", "f": 1.3, "p": 1.33, "s": 2.2, "l": "Ла Лига", "r": "Pinnacle", "mv": 4, "mh": 24}, {"t": "2026-08-27T18:30:00Z", "m": "Celta Vigo - CA Osasuna", "o": "Celta Vigo", "f": 2.02, "p": 2.06, "s": 0.3, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-27T18:30:00Z", "m": "Celta Vigo - CA Osasuna", "o": "Draw", "f": 3.65, "p": 3.72, "s": -1.3, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-27T18:30:00Z", "m": "Celta Vigo - CA Osasuna", "o": "CA Osasuna", "f": 4.31, "p": 4.4, "s": -2.6, "l": "Ла Лига", "r": "Pinnacle", "mv": null, "mh": null}], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1787719414};
+const DATA = [{"t": "2026-08-27T18:30:00Z", "m": "Celta Vigo - CA Osasuna", "o": "Celta Vigo", "f": 2.0, "p": 2.04, "s": 1.7, "l": "Ла Лига", "r": "Pinnacle", "mv": 2, "mh": 12}, {"t": "2026-08-27T19:00:00Z", "m": "Barcelona - Athletic Bilbao", "o": "Barcelona", "f": 1.31, "p": 1.34, "s": 1.5, "l": "Ла Лига", "r": "Pinnacle", "mv": 2, "mh": 12}, {"t": "2026-08-28T15:00:00Z", "m": "FC Akron Tolyatti - CSKA Moscow", "o": "CSKA Moscow", "f": 1.7, "p": 1.73, "s": 1.3, "l": "soccer_russia_premier_league", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-28T15:00:00Z", "m": "FC Akron Tolyatti - CSKA Moscow", "o": "Draw", "f": 4.51, "p": 4.61, "s": -3.4, "l": "soccer_russia_premier_league", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-08-27T18:30:00Z", "m": "Celta Vigo - CA Osasuna", "o": "Draw", "f": 3.69, "p": 3.76, "s": -3.8, "l": "Ла Лига", "r": "Pinnacle", "mv": -1, "mh": 12}, {"t": "2026-08-27T18:30:00Z", "m": "Celta Vigo - CA Osasuna", "o": "CA Osasuna", "f": 4.38, "p": 4.47, "s": -4.2, "l": "Ла Лига", "r": "Pinnacle", "mv": -2, "mh": 12}, {"t": "2026-08-28T15:00:00Z", "m": "FC Akron Tolyatti - CSKA Moscow", "o": "FC Akron Tolyatti", "f": 5.28, "p": 5.38, "s": -7.7, "l": "soccer_russia_premier_league", "r": "Pinnacle", "mv": null, "mh": null}], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1787763202};
 const fmt = n => n.toFixed(2);
 
 function timeLabel(iso){
