@@ -134,7 +134,7 @@ footer b{color:var(--ink-dim); font-weight:600}
     <h1>Окно ставок</h1>
     <div class="sub">Честная цена матча и минимальный коэффициент, при котором
       ставка выгодна. Сравни с ценой в своей БК.</div>
-    <div class="stamp">снимок 25.09 09:28 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
+    <div class="stamp">снимок 25.09 19:58 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
   </header>
 
   <div class="stale" id="stale" style="display:none"></div>
@@ -167,7 +167,7 @@ footer b{color:var(--ink-dim); font-weight:600}
 </div>
 
 <script>
-const DATA = [{"t": "2026-09-26T21:30:00Z", "m": "Goiás - Atletico Goianiense", "o": "Atletico Goianiense", "f": 3.12, "p": 3.19, "s": 0.8, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-25T22:30:00Z", "m": "Grêmio Novorizontino - São Bernardo", "o": "Grêmio Novorizontino", "f": 1.62, "p": 1.65, "s": -1.8, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": 0, "mh": 24}, {"t": "2026-09-25T23:30:00Z", "m": "Vila Nova - Londrina", "o": "Vila Nova", "f": 1.63, "p": 1.66, "s": -1.9, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": 1, "mh": 24}, {"t": "2026-09-26T19:30:00Z", "m": "Nautico PE - Sport Recife", "o": "Nautico PE", "f": 2.56, "p": 2.61, "s": -4.1, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-26T19:30:00Z", "m": "Operario PR - Ceará", "o": "Operario PR", "f": 2.22, "p": 2.26, "s": -4.5, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-26T19:30:00Z", "m": "Nautico PE - Sport Recife", "o": "Sport Recife", "f": 2.96, "p": 3.02, "s": -5.5, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-26T21:30:00Z", "m": "Goiás - Atletico Goianiense", "o": "Draw", "f": 3.19, "p": 3.25, "s": -6.0, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-26T21:30:00Z", "m": "Goiás - Atletico Goianiense", "o": "Goiás", "f": 2.73, "p": 2.78, "s": -6.1, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-26T19:30:00Z", "m": "Operario PR - Ceará", "o": "Ceará", "f": 3.73, "p": 3.81, "s": -7.6, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-25T22:30:00Z", "m": "Grêmio Novorizontino - São Bernardo", "o": "Draw", "f": 4.33, "p": 4.42, "s": -7.7, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": 1, "mh": 24}, {"t": "2026-09-26T19:30:00Z", "m": "Nautico PE - Sport Recife", "o": "Draw", "f": 3.69, "p": 3.76, "s": -7.8, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-09-25T23:30:00Z", "m": "Vila Nova - Londrina", "o": "Draw", "f": 4.1, "p": 4.18, "s": -8.5, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": -2, "mh": 24}, {"t": "2026-09-26T19:30:00Z", "m": "Operario PR - Ceará", "o": "Draw", "f": 3.55, "p": 3.62, "s": -8.5, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1790328534};
+const DATA = [], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1790366311};
 const fmt = n => n.toFixed(2);
 
 function timeLabel(iso){
