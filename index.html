@@ -134,7 +134,7 @@ footer b{color:var(--ink-dim); font-weight:600}
     <h1>Окно ставок</h1>
     <div class="sub">Честная цена матча и минимальный коэффициент, при котором
       ставка выгодна. Сравни с ценой в своей БК.</div>
-    <div class="stamp">снимок 20.10 19:57 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
+    <div class="stamp">снимок 21.10 09:13 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
   </header>
 
   <div class="stale" id="stale" style="display:none"></div>
@@ -167,7 +167,7 @@ footer b{color:var(--ink-dim); font-weight:600}
 </div>
 
 <script>
-const DATA = [{"t": "2026-10-21T18:00:00Z", "m": "Levante - Athletic Bilbao", "o": "Draw", "f": 3.28, "p": 3.35, "s": 7.3, "l": "Ла Лига", "r": "Pinnacle", "mv": 0, "mh": 23}, {"t": "2026-10-21T18:00:00Z", "m": "Levante - Athletic Bilbao", "o": "Athletic Bilbao", "f": 2.28, "p": 2.32, "s": -1.7, "l": "Ла Лига", "r": "Pinnacle", "mv": -1, "mh": 23}, {"t": "2026-10-21T18:00:00Z", "m": "Levante - Athletic Bilbao", "o": "Levante", "f": 3.9, "p": 3.98, "s": -4.2, "l": "Ла Лига", "r": "Pinnacle", "mv": 2, "mh": 23}], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1792526260};
+const DATA = [{"t": "2026-10-21T18:00:00Z", "m": "Levante - Athletic Bilbao", "o": "Draw", "f": 3.45, "p": 3.52, "s": 1.9, "l": "Ла Лига", "r": "Pinnacle", "mv": -5, "mh": 36}, {"t": "2026-10-21T18:00:00Z", "m": "Levante - Athletic Bilbao", "o": "Athletic Bilbao", "f": 2.21, "p": 2.25, "s": 1.6, "l": "Ла Лига", "r": "Pinnacle", "mv": 2, "mh": 36}, {"t": "2026-10-21T18:00:00Z", "m": "Levante - Athletic Bilbao", "o": "Levante", "f": 3.89, "p": 3.97, "s": -3.7, "l": "Ла Лига", "r": "Pinnacle", "mv": 2, "mh": 36}], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1792574028};
 const fmt = n => n.toFixed(2);
 
 function timeLabel(iso){
