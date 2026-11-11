@@ -134,7 +134,7 @@ footer b{color:var(--ink-dim); font-weight:600}
     <h1>Окно ставок</h1>
     <div class="sub">Честная цена матча и минимальный коэффициент, при котором
       ставка выгодна. Сравни с ценой в своей БК.</div>
-    <div class="stamp">снимок 11.11 11:44 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
+    <div class="stamp">снимок 11.11 22:36 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
   </header>
 
   <div class="stale" id="stale" style="display:none"></div>
@@ -167,7 +167,7 @@ footer b{color:var(--ink-dim); font-weight:600}
 </div>
 
 <script>
-const DATA = [{"t": "2026-11-12T23:00:00Z", "m": "São Bernardo - Athletic Club (MG)", "o": "São Bernardo", "f": 2.01, "p": 2.05, "s": -1.4, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-11-12T22:00:00Z", "m": "Ponte Preta - Operario PR", "o": "Operario PR", "f": 1.69, "p": 1.72, "s": -2.3, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-11-11T22:00:00Z", "m": "Londrina - Nautico PE", "o": "Londrina", "f": 1.83, "p": 1.86, "s": -2.7, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": -11, "mh": 36}, {"t": "2026-11-11T22:00:00Z", "m": "Londrina - Nautico PE", "o": "Nautico PE", "f": 4.75, "p": 4.84, "s": -3.1, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": 20, "mh": 36}, {"t": "2026-11-11T22:00:00Z", "m": "Londrina - Nautico PE", "o": "Draw", "f": 4.12, "p": 4.21, "s": -6.6, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": 16, "mh": 36}, {"t": "2026-11-12T22:00:00Z", "m": "Ponte Preta - Operario PR", "o": "Ponte Preta", "f": 5.56, "p": 5.67, "s": -8.2, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-11-12T23:00:00Z", "m": "São Bernardo - Athletic Club (MG)", "o": "Draw", "f": 3.78, "p": 3.85, "s": -8.9, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-11-12T23:00:00Z", "m": "São Bernardo - Athletic Club (MG)", "o": "Athletic Club (MG)", "f": 4.21, "p": 4.3, "s": -9.6, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-11-12T22:00:00Z", "m": "Ponte Preta - Operario PR", "o": "Draw", "f": 4.39, "p": 4.47, "s": -10.0, "l": "soccer_brazil_serie_b", "r": "Pinnacle", "mv": null, "mh": null}], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1794397454};
+const DATA = [], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1794436575};
 const fmt = n => n.toFixed(2);
 
 function timeLabel(iso){
