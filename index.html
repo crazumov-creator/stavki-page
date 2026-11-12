@@ -134,7 +134,7 @@ footer b{color:var(--ink-dim); font-weight:600}
     <h1>Окно ставок</h1>
     <div class="sub">Честная цена матча и минимальный коэффициент, при котором
       ставка выгодна. Сравни с ценой в своей БК.</div>
-    <div class="stamp">снимок 12.11 12:21 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
+    <div class="stamp">снимок 12.11 22:10 &middot; банк 2500 ₽ &middot; ставка 62.50 ₽</div>
   </header>
 
   <div class="stale" id="stale" style="display:none"></div>
@@ -167,7 +167,7 @@ footer b{color:var(--ink-dim); font-weight:600}
 </div>
 
 <script>
-const DATA = [], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1794486116};
+const DATA = [{"t": "2026-11-14T21:30:00Z", "m": "Mirassol - Atletico Mineiro", "o": "Mirassol", "f": 2.06, "p": 2.1, "s": -0.3, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-11-14T21:30:00Z", "m": "Mirassol - Atletico Mineiro", "o": "Atletico Mineiro", "f": 3.97, "p": 4.05, "s": -4.2, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}, {"t": "2026-11-14T21:30:00Z", "m": "Mirassol - Atletico Mineiro", "o": "Draw", "f": 3.82, "p": 3.9, "s": -5.8, "l": "Бразилия", "r": "Pinnacle", "mv": null, "mh": null}], CFG = {"thr": 2.0, "thrMax": 15.0, "move": 8.0, "stake": 62.5, "built": 1794521458};
 const fmt = n => n.toFixed(2);
 
 function timeLabel(iso){
